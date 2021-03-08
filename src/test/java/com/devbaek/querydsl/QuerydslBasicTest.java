@@ -684,4 +684,36 @@ class QuerydslBasicTest {
     private BooleanExpression ageEq(Integer ageParam) {
         return ageParam != null ? member.age.eq(ageParam) : null;
     }
+
+    @Test
+    @DisplayName("bulk update test")
+    void bulkUpdateTest() {
+
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+
+        em.flush();
+        em.clear();
+    }
+
+    @Test
+    @DisplayName("bulk add test")
+    void bulkAddTest() {
+        long count = queryFactory
+                .update(member)
+                .set(member.age, member.age.add(1))
+                .execute();
+    }
+
+    @Test
+    @DisplayName("bulk delete test")
+    void bulkDeleteTest() {
+        long count = queryFactory
+                .delete(member)
+                .where(member.age.gt(18))
+                .execute();
+    }
 }
